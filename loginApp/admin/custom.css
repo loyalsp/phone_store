@@ -1,0 +1,76 @@
+<style>
+.box {
+	background-color: magenta;
+	border: 1px solid;
+}
+
+.round {
+	height: 200px;
+	width: 170px;
+}
+
+.sign-in-facebook {
+	background-position: -9px -7px;
+	background-repeat: no-repeat;
+	background-size: 39px 43px;
+	padding-left: 25px;
+	padding-right: 25px;
+	color: #000;
+}
+
+.sign-in-facebook:hover {
+	background-position: -9px -7px;
+	background-repeat: no-repeat;
+	background-size: 39px 43px;
+	color: #000;
+}
+
+p {
+	font-weight: bold;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+
+
+/*.body-wrap {
+	min-height: 700px;
+}
+*/
+
+
+nav {
+	margin-top: 60px;
+	box-shadow: 5px 4px 5px #000;
+}
+
+.top-cont {
+	background-color: orange;
+}
+
+.p-img{
+height:220px;
+width:200px;
+}
+.main-wrapper{
+	background-color:black;
+	
+}
+.footer-text
+{
+	color:white;
+	margin-top:8px;
+	font-size:16px;
+	word-spacing: 2px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+.btn-pos
+{
+	position:relative;
+	left:50px;
+	
+}
+</style>
