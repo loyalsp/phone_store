@@ -71,7 +71,7 @@ function main_function()
 						class="form-control" name="category_name" required>
 						<option></option>
 						<option value="electronics">Electronics</option>
-						<option value="grocery">grocery</option>
+						<option value="Fasion">Fasion</option>
 						<option value="furniture">furniture</option>
 					</select>
 				</div>
