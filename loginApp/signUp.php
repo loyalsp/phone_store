@@ -2,7 +2,7 @@
 include 'functions.php';
 function does_user_exist()
 {
-	$dbConnection = get_db_connection();
+	$dbConnection = get_db_connection ();
 	$username = $_POST ['user_id'];
 	$sql = "select * from users where user_id = '$username'";
 	$check_user_id = mysqli_query ( $dbConnection, $sql );
@@ -16,7 +16,7 @@ function does_user_exist()
 function insert_into_db()
 {
 	{
-		$dbConnection = get_db_connection();
+		$dbConnection = get_db_connection ();
 		$username = $_POST ['user_id'];
 		$firstname = $_POST ['first_name'];
 		$lastname = $_POST ['last_name'];
@@ -24,10 +24,10 @@ function insert_into_db()
 		$pwd = $_POST ['pwd'];
 		$address = $_POST ['address'];
 		
+		$email = $username.'@onlinestore.com';
 		mysqli_autocommit ( $dbConnection, FALSE );
-		
-		$sql_1 = "INSERT INTO users(user_id,pwd,first_name,last_name,dob)
-		VALUES ('$username','$pwd','$firstname','$lastname','$dob')";
+		$sql_1 = "INSERT INTO users(user_id,pwd,first_name,last_name,dob,email)
+		VALUES ('$username','$pwd','$firstname','$lastname','$dob','$email')";
 		
 		$user_id = $username;
 		$sql_2 = "insert into address(customer_id,address)
@@ -48,34 +48,47 @@ function insert_into_db()
 			$success = mysqli_commit ( $dbConnection );
 			if ($success)
 			{
-				$success = true;
-				return $success;
+				$subject = 'Congrat! Email has been created';
+				$from = "From: admin@gmail.com<br>";
+				$message = 'This is message!';
+				send_email ( $email, $subject, $from, $message );
+				return $email;
 			}
 		} 
 
 		else
 		{
 			mysqli_rollback ( $dbConnection );
-			$success = false;
-			return $success;
+			
+			return false;
 		}
 	}
 	close_the_connection ( $dbConnection );
 }
-
 function sign_up()
 {
 	$username = $_POST ['user_id'];
 	$check_existance = does_user_exist ();
 	if (! $check_existance)
 	{
-		$insert_info = insert_into_db ();
-		if ($insert_info)
+		$email = insert_into_db ();
+		
+		if (isset ( $email ))
 		{
-			return true;
+			return $email;
 		} else
 			return false;
 	}
+}
+function send_email($mail, $subject, $headers, $message)
+{
+	$to = $mail;
+	$sent = mail ( $to, $subject, $message, $headers );
+	if ($sent)
+	{
+		return true;
+	}
+	else return false;
 }
 
 ?>
@@ -123,13 +136,14 @@ include 'header.html';
 		<?php
 		if (! empty ( $_POST ))
 		{
-			$sign_up = sign_up ();
+			$email = sign_up ();
 			$username = $_POST ['user_id'];
-			if ($sign_up)
+			if (isset ( $email ))
 			{
 				echo '<div class="alert alert-success" role="alert">
-			Congratulatin Username ' . $username . ' has been created and other 
-			info has been inserted!
+			Congratulatin you have created an account. Your email is <strong>' . $email . '</strong> and other
+			information has been inserted!<br>
+			<strong>An email has been sent to your account for confirmation.</strong>
             </div>';
 			} 
 

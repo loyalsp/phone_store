@@ -59,11 +59,8 @@ function load_products()
 
 	<!--Product-->
 		<?php
-		if(!empty($_SESSION))
+		if(!empty($_GET))
 		{
-			header("Location:landingPage.php");
-		}
-		else{
 		load_products ();
 		if (! empty ( $products ))
 			foreach ( $products as $prod )
@@ -71,17 +68,19 @@ function load_products()
 				?>
 		<div class="col-xs-6 col-md-4">
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
+			<div class="btn-pos">
 			<p><?=$prod['product_name']?></p>
 			<p>Price <?=$prod['price']?>.Rs</p>
-			<p>Stock <?=$prod['stock']?></p>
+			</div>
 <div class="btn-pos">
 			<a href="./logIn.php"
-				class="btn btn-info" role="button">BUY</a>
+				class="btn btn-success" role="button" style="width:85px;">BUY</a>
 				</div>
 		</div>
 		<?php
 			}
 		}
+		else header("location : index.php")
 		?>
 		<!--Product-->
 		

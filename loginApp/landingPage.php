@@ -130,9 +130,10 @@ if (! empty($_GET)) {
 				?>
 		<div class="col-xs-6 col-md-4">
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
+			<div class="btn-pos">
 			<p><?=$prod['product_name']?></p>
 			<p>Price: <?=$prod['price']?>.Rs</p>
-			<p>Stock left: <?=$prod['stock']?></p>
+			</div>
 <div class="btn-pos">
 			<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
 				class="btn

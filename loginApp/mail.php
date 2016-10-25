@@ -1,9 +1,21 @@
 <?php
 include 'landingHeader.html';
 $to = "dharkonaa@gmail.com";
-$subject = "test mail";
-$headers = "From: adnann.rasheed@gmail.com";
-$message = "this is the message";
+$_POST['req-email'] = "From: adnann.rasheed@gmail.com";
+$to = 'bob@example.com';
+$subject = 'Website Change Reqest';
+$headers = "From: " . strip_tags($_POST['req-email']) . "<br>";
+$headers .= "Reply-To: ". strip_tags($_POST['req-email']) . "<br>";
+$headers .= "CC: susan@example.com<br>";
+$headers .= "Content-Type: text/html; charset=UTF-8<br>";
+
+$message = '<p><strong>This is strong text</strong> while this is not.</p>';
+
+
+
+
+
+
 $sent = mail($to, $subject, $message,$headers);
 if($sent)
 

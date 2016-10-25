@@ -1,17 +1,7 @@
 <?php
-include 'header.html';
 session_start ();
-function get_db_connection()
-{
-	// CONECTING TO DB
-	$dbhost = 'localhost:3306/';
-	$dbuser = 'root';
-	$dbpass = '';
-	$database = 'online_orders';
-	$dbConnection = mysqli_connect($dbhost, $dbuser, $dbpass, $database);
-	return $dbConnection;
-
-}
+include 'landingHeader.html';
+include 'functions.php';
 // Get the products from db
 function get_all_products()
 {
@@ -22,8 +12,13 @@ function get_all_products()
 	$dbConnection = get_db_connection ();
 	if ($dbConnection)
 	{
-
-		$sql_1 = "select * from products where stock>=1";
+		$cat_name = $_GET['category_name'];
+		$select_cat = "select category_id from categories where category_name='$cat_name'";
+		$result_of_select_cat = mysqli_query ( $dbConnection, $select_cat );
+		$array_1 = mysqli_fetch_array ( $result_of_select_cat );
+		$category_num = $array_1['category_id'];
+		
+		$sql_1 = "select * from products where category_num=$category_num";
 		$result = mysqli_query ( $dbConnection, $sql_1 );
 		echo mysqli_error ( $dbConnection );
 		// getting the total rows from the db
@@ -35,8 +30,8 @@ function get_all_products()
 			while ( $num_rows > $i )
 			{
 				// fetching the arrays from the rest
-				$array = mysqli_fetch_array ( $result );
-				array_push ( $product_list, $array );
+				$array_2 = mysqli_fetch_array ( $result );
+				array_push ( $product_list, $array_2 );
 				$i ++;
 			}
 		}
@@ -45,7 +40,7 @@ function get_all_products()
 		echo "could not connect";
 	}
 	// in the end we close the connection and return the priducts
-	close_db_connection ( $dbConnection );
+	close_the_connection($dbConnection);
 	return $product_list;
 }
 function load_products()
@@ -55,11 +50,10 @@ function load_products()
 		// you can do all watever you want for logged in user
 	
 }
-// this is to close the b connection
-function close_db_connection($connection)
-{
-	return mysqli_close($connection);
+if(empty($_SESSION)){
+	header("Location:index.php");
 }
+
 ?>
 <div class="container">
 	<h1>Landing Page</h1>
@@ -67,11 +61,7 @@ function close_db_connection($connection)
 
 	<!--Product-->
 		<?php
-		if(!empty($_SESSION))
-		{
-			header("Location:landingPage.php");
-		}
-		else{
+	
 		load_products ();
 		if (! empty ( $products ))
 			foreach ( $products as $prod )
@@ -79,17 +69,19 @@ function close_db_connection($connection)
 				?>
 		<div class="col-xs-6 col-md-4">
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
+			<div class="btn-pos">
 			<p><?=$prod['product_name']?></p>
 			<p>Price <?=$prod['price']?>.Rs</p>
-			<p>Stock <?=$prod['stock']?></p>
+			</div>
 <div class="btn-pos">
-			<a href="./logIn.php"
+				<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
 				class="btn btn-success" role="button" style="width:85px;">BUY</a>
 				</div>
 		</div>
 		<?php
 			}
-		}
+		
+		
 		?>
 		<!--Product-->
 		
