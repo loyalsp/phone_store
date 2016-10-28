@@ -107,26 +107,11 @@ function test_product()
 // FOR Making an order
 // USE GET
 if (! empty($_GET)) {
+     // p_num will be present if passed as query parameter
+    $_SESSION['p_num'] = $_GET['p_num']; // p_num will be present if passed as query parameter
+   
     
-    $product_num = $_GET['p_num']; // p_num will be present if passed as query parameter
-    
-    $dbConnection = get_db_connection();
-    
-    if (! $dbConnection) {
-        echo 'could not connect ' . mysql_error();
-    } else {
-        $sql_order = "insert into orders(customerId,product_number) values('$username',$product_num)";
-        $result_order = mysqli_query($dbConnection, $sql_order);
-        $sql_p_name = "select product_name from products where product_num=$product_num";
-        $sql_p_name_result = mysqli_query($dbConnection, $sql_p_name);
-        $array = mysqli_fetch_array($sql_p_name_result);
-        $product_name = $array['product_name'];
-        if (! $result_order) {
-            echo mysqli_error($dbConnection);
-        } else
-            echo 'You just have buy ' . $product_name;
-    }
-   close_db_connection($dbConnection);
+   header("Location: order.php");
 }
 
 ?>
@@ -145,13 +130,14 @@ if (! empty($_GET)) {
 				?>
 		<div class="col-xs-6 col-md-4">
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
+			<div class="btn-pos">
 			<p><?=$prod['product_name']?></p>
 			<p>Price: <?=$prod['price']?>.Rs</p>
-			<p>Stock left: <?=$prod['stock']?></p>
+			</div>
 <div class="btn-pos">
 			<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
 				class="btn
-				btn-info" role="button">BUY</a>
+				btn-success" role="button" style="width:85px;">BUY</a>
 				</div>
 		</div>
 		<?php
