@@ -1,7 +1,6 @@
 <?php 
-include 'landingHeader.html';
+include 'landingHeader.php';
 include 'functions.php';
-session_start();
 $username = $_SESSION['username'];
 //=========== Functions Section==============//
 
@@ -108,7 +107,8 @@ function test_product()
 // USE GET
 if (! empty($_GET)) {
      // p_num will be present if passed as query parameter
-    $_SESSION['p_num'] = $_GET['p_num']; // p_num will be present if passed as query parameter
+    $_SESSION['p_num'] = $_GET['p_num']; 
+    // p_num will be present if passed as query parameter
    
     
    header("Location: order.php");
