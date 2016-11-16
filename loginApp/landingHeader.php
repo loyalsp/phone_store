@@ -1,5 +1,10 @@
 <?php 
 session_start();
+if (! empty($_GET) && $_GET['logout'] == 'yes') {
+	session_unset();
+	session_destroy();
+	header("Location:logIn.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,7 +64,10 @@ session_start();
 							
 							<ul class="dropdown-menu">
 								<li class=""><a class="strong" href="">Setting</a></li>
-								<li class=""><a class="strong" href="logOut.php">Log Out</a></li>
+								<li class=""><a class="strong" href="cart.php">View Your Cart</a></li>
+								<hr>
+								<li class=""><a class="strong" href="landingHeader.php?logout=yes">Log Out</a></li>
+		
 							</ul></li>
 							<img src="<?=$_SESSION ['p_img']?>" class="img-rounded" style="height:30px;width:40px; position:relative; top:10px;">
 					</ul>
