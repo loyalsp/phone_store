@@ -111,7 +111,7 @@ if (! empty($_GET)) {
     // p_num will be present if passed as query parameter
    
     
-   header("Location: order.php");
+   header("Location: cart.php");
 }
 
 ?>
@@ -137,7 +137,7 @@ if (! empty($_GET)) {
 <div class="btn-pos">
 			<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
 				class="btn
-				btn-success" role="button" style="width:85px;">BUY</a>
+				btn-success" role="button" style="width:auto;">Add to Cart</a>
 				</div>
 		</div>
 		<?php
