@@ -88,5 +88,6 @@ function close_db_connection($connection)
 </div>
 </div>
 <?php
+
 include 'footer.html';
 ?>
