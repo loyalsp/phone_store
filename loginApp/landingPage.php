@@ -107,7 +107,7 @@ function test_product()
 // USE GET
 if (! empty($_GET)) {
      // p_num will be present if passed as query parameter
-    $_SESSION['p_num'] = $_GET['p_num']; 
+   $_GET['p_num']; 
     // p_num will be present if passed as query parameter
    
     
@@ -135,7 +135,7 @@ if (! empty($_GET)) {
 			<p>Price: <?=$prod['price']?>.Rs</p>
 			</div>
 <div class="btn-pos">
-			<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
+			<a href="cart.php?p_num=<?=$prod['product_num'] ?>"
 				class="btn
 				btn-success" role="button" style="width:auto;">Add to Cart</a>
 				</div>
