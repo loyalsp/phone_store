@@ -1,75 +1,129 @@
 <?php
 include 'landingHeader.php';
 include 'functions.php';
-$product_id = $_SESSION ['p_num'];
 $username = $_SESSION ['username'];
 
-function select_product_row($connection,$product_id)
+if (! empty ( $_GET ) && isset ( $_GET ['delete'] ))
+{
+	$indexOfCart = $_GET ['delete'];
+	delete_product ( $indexOfCart );
+}
+/*
+***************************************************************************
+				 			* FUNCTIONS SECTION
+***************************************************************************
+*/
+// this function is called when the user delete any product from his cart
+function delete_product($index)
+{
+	unset ( $_SESSION ['cart'] [$index] );
+	array_values ( $_SESSION ['cart'] );
+	if (empty ( $_SESSION ['cart'] ))
+	{
+		unset ( $_SESSION ['cart'] );
+	}
+	header ( "Refresh:0; url=cart.php?view_cart=yes" );
+}
+
+/*
+ *********************************************************************
+ */
+function select_product($connection, $product_id)
 {
 	$select_product = "select * from products where product_num=$product_id";
-	$result = mysqli_query ( $connection, $select_product );
-	$obejct_products = mysqli_fetch_object($result);
-	return $obejct_products;
+	$selected = mysqli_query ( $connection, $select_product );
+	$product = mysqli_fetch_array ( $selected );
+	return $product;
 }
 
-
-$dbConnection = get_db_connection();
-$quantity = 1;
-$date = date("D/ M/ j --  G:i:sa");
-//$order_q = "insert into cart values('$username',$product_id,$quantity,'$date')";
-$order_q = "insert into cart(user_id,product_id,quantity,order_date) values('$username',$product_id,$quantity,'$date')";
-$res = mysqli_query($dbConnection, $order_q);
-if(!$res)
+/*
+ **********************************************************************
+ */
+function add_to_cart()
 {
-	echo mysqli_error($dbConnection);
+	$_SESSION ['p_num'] = $_GET ['p_num']; // this holds product id
+	$connection = get_db_connection ();
+	// getting array to display info of an item
+	$quantity = 1;
+	$product = select_product ( $connection, $_SESSION ['p_num'] );
+	if (! isset ( $_SESSION ['cart'] ))
+	{
+		$cart = array ();
+		array_push ( $cart, $product );
+		$_SESSION ['cart'] = $cart;
+	} else
+	{
+		array_values ( $_SESSION ['cart'] );
+		array_push ( $_SESSION ['cart'], $product );
+	}
+	// this page will show the one last product when the product successfully added to cart
+	require_once ('show_product.php');
 }
- $select_cart = "select * from cart where user_id='$username'";
-$selected = mysqli_query($dbConnection, $select_cart);
-$rows = mysqli_num_rows($selected);
-$i = 0;
-?>
-<div class="container">
-<table class="table table-hover table-bordered">
-	<tr>
-		<th>Order Id</th>
-		<th>Product Name</th>
-		<th>Image</th>
-		<th>Items</th>
-		<th>Added to Cart at</th>
-	</tr>
+
+/*
+ **************************************************************************
+ */
+function view_cart()
+{
+	if (isset ( $_SESSION ['cart'] ))
+	{
+		$price = 0;
+		foreach ( $_SESSION ['cart'] as $key => $product )
+		{
+			?>
+<td><?=$product['product_name']?></td>
+<td><img src="./<?=$product['image']?>" class="img-responsive"
+	style="height: 30px; width: auto;"></td>
+<td><?=$product['price']?></td>
+<td><div class="btn-pos">
+		<a href="cart.php?delete=<?=$key?>" class="btn
+				btn-success"
+			role="button" style="width: auto;">Delete</a>
+	</div></td>
+</tr>
+
 <?php
-while ( $rows > $i )
-{
-	
-	 $object = mysqli_fetch_object($selected);
-	 $p_id = $object->product_id;
-	$obejct_products = select_product_row($dbConnection,$p_id);
-	 ?>
-	<tr>
-		<td>
-	<?=$object->order_id?>
-	</td>
-		<td>
-	<?=$obejct_products->product_name?>
-	</td>
-	<td>
-	<img src="./<?=$obejct_products->image?>" class="img-responsive" style="height:30px;width:auto;">
-	</td>
-		<td>
-	<?=$object->quantity?>
-	</td>
-		<td>
-	<?=$object->order_date?>
-	</td>
-	</tr>
-	<?php 
-	$i++;
- } 
-
+			$price = $price + $product ['price'];
+		}
+		echo '<td></td>
+<td></td>
+<td><strong>Total Price : '. $price .'</strong></td>
+<td></td>';
+	} else
+		echo '<div class="alert alert-info">There is no item in your cart</div>';
+}
 ?>
-</table>
-</div>
 
+
+
+
+
+
+<!--------------------------HTML SECTION------------------------->
+							
+							
+<div class="container">
+	<a href="./">GO BACK TO SHOP</a> <br>
+	<table class="table table-striped table-bordered">
+		<tr>
+			<th>Product Name</th>
+			<th>Image</th>
+			<th>Price</th>
+			<th>Items</th>
+		</tr>
+		<tr>
+<?php
+if (! empty ( $_GET ) && isset ( $_GET ['p_num'] ))
+{
+	add_to_cart ();
+}
+if (! empty ( $_GET ) && isset ( $_GET ['view_cart'] ))
+{
+	view_cart ();
+}
+?>
+	</table>
+</div>
 <?php
 include 'footer.html';
 ?>
