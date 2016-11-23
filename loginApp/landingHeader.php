@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if (! empty($_GET) && isset($_GET['logout']) && $_GET['logout'] == 'yes') {
+	session_unset();
+	session_destroy();
+	header("Location:logIn.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,12 +41,13 @@
 							class="icon-bar"></span>
 					</button>
 					<!-- naming the header -->
-					<a href="./" class="navbar-brand">Log IN App</a>
+					<a class="navbar-brand" href="./">
+            <span><img class="img-rounded" src="images/logo.png" style="position: relative; top:-3px;"></span>
 				</div>
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li class="dropdown"><a href="" class="dropdown-toggle strong"
-							data-toggle="dropdown">Categories</a>
+							data-toggle="dropdown" style="font-size: 16.5px;">CATEGORIES</a>
 							<ul class="dropdown-menu">
 								<li class=""><a class="strong" href="select_category.php?category_name=Electronics">
 										Electronics</a></li>
@@ -51,12 +61,16 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown"><a href="" class="dropdown-toggle strong"
-							data-toggle="dropdown"><b class="caret"></b></a>
+							data-toggle="dropdown"><?=ucfirst($_SESSION['username'])?></a>
+							
 							<ul class="dropdown-menu">
-	
 								<li class=""><a class="strong" href="">Setting</a></li>
-								<li class=""><a class="strong" href="logOut.php">Log Out</a></li>
+								<li class=""><a class="strong" href="cart.php?view_cart=yes">View Your Cart</a></li>
+								<hr>
+								<li class=""><a class="strong" href="landingHeader.php?logout=yes">Log Out</a></li>
+		
 							</ul></li>
+							<img src="<?=$_SESSION ['p_img']?>" class="img-rounded" style="height:30px;width:40px; position:relative; top:10px;">
 					</ul>
 											<form class="navbar-form navbar-right" role="search">
   <div class="form-group">

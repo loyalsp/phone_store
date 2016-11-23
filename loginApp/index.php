@@ -1,17 +1,7 @@
 <?php
 include 'header.html';
+include 'functions.php';
 session_start ();
-function get_db_connection()
-{
-	// CONECTING TO DB
-	$dbhost = 'localhost:3306/';
-	$dbuser = 'root';
-	$dbpass = '';
-	$database = 'online_orders';
-	$dbConnection = mysqli_connect($dbhost, $dbuser, $dbpass, $database);
-	return $dbConnection;
-
-}
 // Get the products from db
 function get_all_products()
 {
@@ -81,7 +71,7 @@ function close_db_connection($connection)
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
 			<p><?=$prod['product_name']?></p>
 			<p>Price <?=$prod['price']?>.Rs</p>
-			<p>Stock <?=$prod['stock']?></p>
+			<p>Availble</p>
 <div class="btn-pos">
 			<a href="./logIn.php"
 				class="btn btn-success" role="button" style="width:85px;">BUY</a>
@@ -98,5 +88,6 @@ function close_db_connection($connection)
 </div>
 </div>
 <?php
+
 include 'footer.html';
 ?>

@@ -2,61 +2,75 @@
 include 'adminHeader.html';
 include 'functions.php';
 
-function select_the_category_from_db()
+function select_the_category_from_db($connection)
 {
+	
 	$category_name = $_POST['category_name'];
-$dbConnection = get_db_connection();
-$get_category_from_db = "select category_id from categories where category_name ='$category_name'";
-$result_of_get_category = mysqli_query( $dbConnection, $get_category_from_db) ;
-$array = mysqli_fetch_assoc($result_of_get_category);
-$selected_category_num = $array['category_id'];
-return $selected_category_num;
+	$get_category_from_db = "select category_id from categories where category_name ='$category_name'";
+	$result_of_get_category = mysqli_query( $connection, $get_category_from_db) ;
+	$array = mysqli_fetch_assoc($result_of_get_category);
+	$selected_category_name = $array['category_id'];
+	return $selected_category_name;
 }
 
-function upload_new_product()
+function upload_new_product($connection)
 {
-	$selected_category = select_the_category_from_db();
-	$dbConnection = get_db_connection();
+	$selected_category = select_the_category_from_db($connection);
 	$product_name = $_POST['product_name'];
 	$price = $_POST['price'];
 	$stock = $_POST['stock'];
 	$image = $_POST['image'];
 	$upload_the_product = "insert into products(category_num,product_name,price,stock,image) values('$selected_category','$product_name','$price','$stock','$image')";
-	$result_of_uploaded_product = mysqli_query($dbConnection, $upload_the_product);
+	$result_of_uploaded_product = mysqli_query($connection, $upload_the_product);
 	return true;
 }
 
-function update_the_product()
+function does_product_exist($connection)
 {
 	$product_name = $_POST['product_name'];
-	$new_stock = $_POST['stock'];
-	
-	$dbConnection = get_db_connection();
 	$does_product_exist = "select product_num,stock from products where product_name='$product_name'";
-	$result_of_product_exist = mysqli_query($dbConnection, $does_product_exist);
+	$result_of_product_exist = mysqli_query($connection, $does_product_exist);
+	if(!$result_of_product_exist)
+	{
+	return false;	
+	}
+	else return $result_of_product_exist;
+}
+function update_the_product($connection)
+{
+	$result_of_product_exist = does_product_exist($connection);
+	if(isset($result_of_product_exist))
+	{
 	$num_rows = mysqli_num_rows ( $result_of_product_exist );
 	if ($num_rows==1)
 	{
 	$array = mysqli_fetch_assoc($result_of_product_exist);
 	$product_num = $array['product_num'];
 	$previous_stock = $array['stock'];
+	$new_stock = $_POST['stock'];
 	$updated_stock = $previous_stock+$new_stock;
 	$update_the_product = "update products set stock=$updated_stock where product_num=$product_num";
-	$result_of_update = mysqli_query($dbConnection, $update_the_product);
-	return true;
-	}
-	else return false;
-}
-function main_function()
-{
-	$selected_category_num = select_the_category_from_db();
-	$result_of_update = update_the_product();
+	$result_of_update = mysqli_query($connection, $update_the_product);
 	if(!$result_of_update)
 	{
-		$result_of_new_upload = upload_new_product();
-		return $result_of_new_upload;
+		return false;
 	}
-	else return false;
+	else return true;
+	}
+	}
+}
+
+function main_function()
+{
+	$dbConnection = get_db_connection();
+	$result_of_update = update_the_product($dbConnection);
+	if(!$result_of_update)
+	{
+		$result_of_new_upload = upload_new_product($dbConnection);
+		return false;
+	}
+	else return true;
+
 }
 
 ?>
@@ -100,12 +114,14 @@ function main_function()
 				<br>
 				<?php 
 				if(!empty($_POST)){
+					$product_name = $_POST['product_name'];
 					$result_of_new_upload = main_function();
 					if($result_of_new_upload)
 					{
-						echo 'new product has been inserted';
+						echo $product_name.' exists! so product`s stock has been update';
 					}
-					else echo 'prodct exists so stock has been updated';
+					else echo 'New product '.$product_name.' has been inserted';
+					
 				}
 				?>
 				
