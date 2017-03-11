@@ -2,9 +2,9 @@
 // to make db connection
 function get_db_connection()
 {
-	$dbhost = 'localhost:3306/';
+	$dbhost = 'localhost';
 	$dbuser = 'root';
-	$dbpass = '';
+	$dbpass = 'root';
 	$database = 'online_orders';
 	$dbConnection = mysqli_connect ( $dbhost, $dbuser, $dbpass, $database );
 	return $dbConnection;

@@ -1,6 +1,7 @@
 <?php 
 include 'landingHeader.php';
 include 'functions.php';
+
 $username = $_SESSION['username'];
 //=========== Functions Section==============//
 
@@ -132,7 +133,7 @@ if (! empty($_GET)) {
 			<img src="<?=$prod['image']?>" class="img-responsivep p-img">
 			<div class="btn-pos">
 			<p><?=$prod['product_name']?></p>
-			<p>Price: <?=$prod['price']?>.Rs</p>
+			<p>Price: $ <?=$prod['price']?></p>
 			</div>
 <div class="btn-pos">
 			<a href="cart.php?p_num=<?=$prod['product_num'] ?>"

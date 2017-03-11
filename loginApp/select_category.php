@@ -1,7 +1,6 @@
 <?php
-session_start ();
-include 'landingHeader.html';
 include 'functions.php';
+include 'landingHeader.php';
 // Get the products from db
 function get_all_products()
 {
@@ -74,8 +73,9 @@ if(empty($_SESSION)){
 			<p>Price <?=$prod['price']?>.Rs</p>
 			</div>
 <div class="btn-pos">
-				<a href="landingPage.php?p_num=<?=$prod['product_num'] ?>"
-				class="btn btn-success" role="button" style="width:85px;">BUY</a>
+				<a href="cart.php?p_num=<?=$prod['product_num'] ?>"
+				class="btn
+				btn-success" role="button" style="width:auto;">Add to Cart</a>
 				</div>
 		</div>
 		<?php

@@ -64,7 +64,7 @@ function send_email($connection, $to)
 	$sub = ' Welcome message ';
 	$msg = 'Congratulation ' . $to . 'You have created new account.';
 	$from = "admin@onlineorders.com";
-	$result = mysqli_query ( $connection, "INSERT INTO usermai values('','$to','$from','$sub','$msg','',sysdate())" );
+	$result = mysqli_query ( $connection, "INSERT INTO usermail values('','$to','$from','$sub','$msg','',sysdate())" );
 	close_the_connection($connection);
 	// Insert query returns boolean in both conditions.
 }

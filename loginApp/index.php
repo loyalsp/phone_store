@@ -1,7 +1,12 @@
 <?php
+ob_start();
 include 'header.html';
 include 'functions.php';
-session_start ();
+session_start();
+if(isset($_SESSION ['username'] ))
+{
+	header ( "Location: landingPage.php" );
+}
 // Get the products from db
 function get_all_products()
 {

@@ -1,7 +1,12 @@
 <?php
+ob_start();
 include 'header.html';
 include 'functions.php';
 session_start ();
+if(isset($_SESSION ['username'] ))
+{
+	header ( "Location: landingPage.php" );
+}
 
 /**
  * **************************************************************
@@ -29,6 +34,7 @@ function get_user($connection)
  */
 function set_login_session($array)
 {
+
 	$_SESSION ['username'] = $array ['user_name'];
 	$_SESSION ['p_img'] = $array ['image'];
 	// taking the user to the landingpage
